@@ -1,7 +1,7 @@
+// changed, tested
 var common = require("./common.js");
 
 Parse.Cloud.beforeSave("Student", function(request, response) {
-    Parse.Cloud.useMasterKey();
     var student = request.object;
     if(student.dirty("randomEnabled"))
         student.set("randomEnabledChanged", true);
@@ -12,7 +12,6 @@ Parse.Cloud.beforeSave("Student", function(request, response) {
 });
 
 Parse.Cloud.afterSave("Student", function(request) {
-    Parse.Cloud.useMasterKey();
     var student = request.object;
     var isNew = common.isNewObject(student);
     var randomEnabledChanged = student.get("randomEnabledChanged");
@@ -38,8 +37,12 @@ Parse.Cloud.afterSave("Student", function(request) {
                 userCount.increment("numStudentsRandom", amount);
             }
             student.set("randomEnabledChanged", false);
-            promises.push(student.save());
-            promises.push(userCount.save());
+            promises.push(student.save({
+                useMasterKey: true
+            }));
+            promises.push(userCount.save({
+                useMasterKey: true
+            }));
             Parse.Promise.when(promises).then(
                 function(success) {
                     return;
@@ -52,7 +55,6 @@ Parse.Cloud.afterSave("Student", function(request) {
 });
 
 Parse.Cloud.afterDelete("Student", function(request) {
-    Parse.Cloud.useMasterKey();
     var student = request.object;
     getUserCount()
         .then(function(userCount) {
@@ -60,7 +62,9 @@ Parse.Cloud.afterDelete("Student", function(request) {
             userCount.increment("totalUsers", -1);
             if(student.get("randomEnabled"))
                 userCount.increment("numStudentsRandom", -1);
-            userCount.save();
+            userCount.save({
+                useMasterKey: true
+            });
         },
         function(error) {
             console.log("Error retrieving user count");
@@ -68,10 +72,9 @@ Parse.Cloud.afterDelete("Student", function(request) {
 });
 
 function getUserCount() {
-    Parse.Cloud.useMasterKey();
     var promise = new Parse.Promise();
     var query = new Parse.Query("UserCount");
-    query.get("gmh73YNe0F", {
+    query.get("gmh73YNe0F", { useMasterKey: true,
         success: function(object) {
             promise.resolve(object);
         },

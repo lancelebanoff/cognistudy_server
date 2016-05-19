@@ -2,7 +2,6 @@ var common = require('./common.js');
 
 Parse.Cloud.define("studentRequestToTutor", function(request, response) {
 
-	Parse.Cloud.useMasterKey();
 	var publicTutorDataId = request.params.publicTutorDataId;
 	var publicStudentDataId = request.params.publicStudentDataId;
 	var query = new Parse.Query("PublicUserData")
