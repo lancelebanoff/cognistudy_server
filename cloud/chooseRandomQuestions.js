@@ -1,4 +1,4 @@
-var common = require('./cloud/common.js');
+var common = require('./common.js');
 
 Parse.Cloud.define("chooseRandomQuestions", function(request, response) {
 

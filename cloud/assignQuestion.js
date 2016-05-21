@@ -1,5 +1,5 @@
 //changed, Logan should test
-var common = require("./cloud/common.js");
+var common = require("./common.js");
 
 Parse.Cloud.define("assignQuestion", function(request, response) {
 	

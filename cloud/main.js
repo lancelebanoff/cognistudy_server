@@ -9,7 +9,6 @@ var m8 = require('./deleteStudentV2.js');
 var m9 = require('./incrementCatAndSubStats.js'); //deprecated
 //var m10 = require('./deleteOldBlockStats.js');
 var m11 = require('./questionCount.js');
-var m12 = require('./chooseRandomQuestionsV2.js');
 var m13 = require('./deleteTestQuestions.js');
 var m14 = require('./studentRequestToTutor');
 var m15 = require('./removeStudent');
